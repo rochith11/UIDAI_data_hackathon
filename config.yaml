@@ -1,0 +1,287 @@
+# UIDAI State-Citizen Friction Intelligence System Configuration
+
+# ============================================================================
+# DATA PATHS
+# ============================================================================
+data:
+  # Input data paths
+  input:
+    enrolment: "archive/api_data_aadhar_enrolment/Combined_Enrolment.csv"
+    demographic: "archive/api_data_aadhar_demographic/Combined_Demographic.csv"
+    biometric: "archive/api_data_aadhar_biometric/Combined_Biometric.csv"
+  
+  # Output data paths
+  output:
+    cleaned_data: "output/cleaned/"
+    features: "output/features/"
+    friction_reports: "output/friction_reports/"
+    visualizations: "output/visualizations/"
+    final_report: "output/UIDAI_Friction_Intelligence_Report.pdf"
+  
+  # Intermediate data
+  intermediate:
+    quality_report: "output/intermediate/data_quality_report.json"
+    feature_matrix: "output/intermediate/feature_matrix.csv"
+    friction_scores: "output/intermediate/friction_scores.csv"
+
+# ============================================================================
+# ANALYSIS PARAMETERS
+# ============================================================================
+analysis:
+  # Primary analysis granularity
+  granularity: "district"  # Options: district, state, pincode
+  
+  # Date range (leave empty for auto-detect from data)
+  date_range:
+    start: null  # Format: YYYY-MM-DD or null for auto
+    end: null    # Format: YYYY-MM-DD or null for auto
+  
+  # Minimum data requirements
+  min_data_points: 30
+  min_interactions_for_ranking: 10
+  min_activity_days: 30
+
+# ============================================================================
+# FRICTION DETECTION THRESHOLDS
+# ============================================================================
+thresholds:
+  # Infrastructure stress
+  infrastructure:
+    under_provisioned:
+      enrolment_percentile: 75
+      bio_ratio_percentile: 25
+    backlog_processing:
+      biometric_percentile: 75
+      enrolment_percentile: 50
+    data_quality_debt:
+      demographic_percentile: 75
+      enrolment_percentile: 50
+  
+  # Access failure
+  access_failure:
+    low_activity_percentile: 10
+    min_activity_days: 30
+    gap_threshold_pct: 60
+  
+  # Age structure
+  age_structure:
+    high_child_ratio: 0.15
+    high_adult_ratio: 0.70
+    velocity_percentile: 75
+  
+  # Migration detection
+  migration:
+    spike_multiplier: 2.0
+    adult_ratio_threshold: 0.70
+  
+  # Data quality debt
+  data_quality:
+    updates_per_1000_enrolments: 100
+    consistency_months: 6
+  
+  # Biometric stress
+  biometric_stress:
+    low_capture_ratio: 0.30
+    repeat_visit_percentile: 75
+    elderly_success_threshold: 0.50
+    child_success_threshold: 0.50
+  
+  # Anomaly detection
+  anomaly:
+    z_score_threshold: 3.0
+    rolling_window_days: 30
+    outlier_std_threshold: 5
+
+# ============================================================================
+# SCORING WEIGHTS
+# ============================================================================
+scoring:
+  # Composite friction score weights (must sum to 1.0)
+  friction_weights:
+    infrastructure_stress: 0.25
+    access_failure: 0.20
+    data_quality_debt: 0.15
+    biometric_stress: 0.20
+    migration_pressure: 0.10
+    age_structure_pressure: 0.10
+  
+  # Severity levels
+  severity_levels:
+    1: "Low"
+    2: "Moderate"
+    3: "High"
+    4: "Critical"
+    5: "Emergency"
+  
+  # ROI thresholds
+  roi_thresholds:
+    high: 3.0
+    medium: 1.5
+    low: 1.0
+
+# ============================================================================
+# COST ESTIMATES (INR)
+# ============================================================================
+costs:
+  # Infrastructure costs
+  infrastructure:
+    biometric_kit: 150000
+    mobile_van: 2500000
+    extended_hours_monthly: 50000
+    operator_training: 10000
+    equipment_calibration: 5000
+  
+  # Operational costs
+  operational:
+    staff_hourly_cost: 200
+    avg_processing_time_minutes: 15
+    verification_cost_per_case: 500
+    duplicate_resolution_cost: 1000
+  
+  # Outreach costs
+  outreach:
+    awareness_campaign_district: 500000
+    ngo_partnership_annual: 1000000
+    incentivized_enrolment_per_person: 100
+    language_materials: 50000
+  
+  # Benefit estimates (annual savings)
+  benefits:
+    reduced_update_burden_per_1000: 50000
+    improved_biometric_success_per_pct: 100000
+    access_gap_closure_per_person: 500
+    infrastructure_efficiency_gain: 200000
+
+# ============================================================================
+# TEMPORAL PARAMETERS
+# ============================================================================
+temporal:
+  # Moving average windows (days)
+  moving_average:
+    short_term: 7
+    medium_term: 30
+    long_term: 90
+  
+  # Forecast horizons (months)
+  forecast:
+    short_term: 12
+    long_term: 24
+
+# ============================================================================
+# VISUALIZATION SETTINGS
+# ============================================================================
+visualization:
+  # Color schemes
+  colors:
+    stress_sequential: "YlOrRd"
+    positive_sequential: "YlGnBu"
+    diverging: "RdYlGn"
+    categorical: "Set2"
+  
+  # Chart parameters
+  chart:
+    figure_width: 12
+    figure_height: 8
+    dpi: 300
+    font_size: 10
+    title_font_size: 14
+    max_color_bins: 7
+  
+  # Map parameters
+  map:
+    show_state_boundaries: true
+    show_district_boundaries: true
+    annotate_top_n: 5
+
+# ============================================================================
+# REPORT SETTINGS
+# ============================================================================
+report:
+  # Report structure
+  sections:
+    - executive_summary
+    - infrastructure_stress
+    - access_failure
+    - age_structure
+    - migration_signals
+    - data_quality_debt
+    - biometric_stress
+    - cross_dataset_insights
+    - anomaly_detection
+    - budget_prioritization
+    - implementation_roadmap
+    - appendix
+  
+  # Top N rankings
+  rankings:
+    top_recommendations: 10
+    top_friction_districts: 20
+    top_anomalies: 10
+  
+  # Priority levels
+  priority_levels:
+    immediate: "Immediate (0-3 months)"
+    short_term: "Short-term (3-12 months)"
+    long_term: "Long-term (1+ years)"
+  
+  # Department mapping
+  departments:
+    infrastructure: "Infrastructure Planning"
+    operations: "Operations"
+    training: "Training & Capacity Building"
+    policy: "Policy & Strategy"
+    technology: "Technology & Innovation"
+    outreach: "Public Outreach & Awareness"
+
+# ============================================================================
+# DATA QUALITY SETTINGS
+# ============================================================================
+data_quality:
+  # Column standardization
+  column_mapping:
+    demo_age_17_: "demo_age_17_greater"
+    bio_age_17_: "bio_age_17_greater"
+  
+  # Validation rules
+  validation:
+    allow_negative_values: false
+    max_daily_count_per_district: 1000000
+    date_range:
+      min_year: 2020
+      max_year: 2025
+  
+  # Duplicate handling
+  duplicates:
+    strategy: "sum"  # Options: sum, first, last, mean
+    identify_by:
+      - date
+      - state
+      - district
+      - pincode
+
+# ============================================================================
+# TESTING SETTINGS
+# ============================================================================
+testing:
+  # Property-based testing
+  property_tests:
+    iterations: 100
+    seed: 42
+  
+  # Test data generation
+  test_data:
+    date_range:
+      start: "2020-01-01"
+      end: "2025-12-31"
+    count_range:
+      min: 0
+      max: 10000
+
+# ============================================================================
+# LOGGING SETTINGS
+# ============================================================================
+logging:
+  level: "INFO"  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "output/logs/analysis.log"
+  console: true
