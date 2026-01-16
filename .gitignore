@@ -49,9 +49,9 @@ htmlcov/
 output/
 *.log
 
-# Data files (large CSVs)
-*.csv
-!**/sample_*.csv
+# # Data files (large CSVs)
+# *.csv
+# !**/sample_*.csv
 
 # Temporary files
 *.tmp
